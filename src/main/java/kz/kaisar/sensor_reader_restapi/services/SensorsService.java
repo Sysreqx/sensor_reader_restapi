@@ -21,4 +21,13 @@ public class SensorsService {
     public Sensor findByName(String name) {
         return sensorsRepository.findByNameIgnoreCase(name);
     }
+
+    @Transactional
+    public void save(SensorDTO sensorDTO) {
+
+        Sensor sensor = new Sensor();
+        sensor.setName(sensorDTO.getName());
+
+        sensorsRepository.save(sensor);
+    }
 }
