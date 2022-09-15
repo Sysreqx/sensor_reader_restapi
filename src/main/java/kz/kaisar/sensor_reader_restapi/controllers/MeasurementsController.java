@@ -26,6 +26,11 @@ public class MeasurementsController {
         return measurementsService.findAll();
     }
 
+    @GetMapping("/rainyDaysCount")
+    public Integer getRainyDaysCount() {
+        return measurementsService.getRainyDaysCount();
+    }
+
     @PostMapping("/add")
     public ResponseEntity add(@RequestBody MeasurementDTO measurementDTO) {
 

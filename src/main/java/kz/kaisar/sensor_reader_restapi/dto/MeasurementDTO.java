@@ -1,5 +1,7 @@
 package kz.kaisar.sensor_reader_restapi.dto;
 
+import kz.kaisar.sensor_reader_restapi.models.Sensor;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -13,12 +15,16 @@ public class MeasurementDTO {
     @Pattern(regexp = "^true$|^false$", message = "allowed input: true or false")
     private boolean isRaining;
 
+    @NotEmpty(message = "Sensor should have a name")
+    private Sensor sensor;
+
     public MeasurementDTO() {
     }
 
-    public MeasurementDTO(int temperature, boolean isRaining) {
+    public MeasurementDTO(int temperature, boolean isRaining, Sensor sensor) {
         this.temperature = temperature;
         this.isRaining = isRaining;
+        this.sensor = sensor;
     }
 
     public int getTemperature() {
@@ -34,6 +40,14 @@ public class MeasurementDTO {
     }
 
     public void setIsRaining(boolean raining) {
-        isRaining = raining;
+        this.isRaining = raining;
+    }
+
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
     }
 }

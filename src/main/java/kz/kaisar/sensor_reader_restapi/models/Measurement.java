@@ -1,8 +1,6 @@
 package kz.kaisar.sensor_reader_restapi.models;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -24,13 +22,18 @@ public class Measurement {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "sensor_id", referencedColumnName = "id")
+    private Sensor sensor;
+
     public Measurement() {
     }
 
-    public Measurement(int temperature, boolean isRaining, Date createdAt) {
+    public Measurement(int temperature, boolean isRaining, Date createdAt, Sensor sensor) {
         this.temperature = temperature;
         this.isRaining = isRaining;
         this.createdAt = createdAt;
+        this.sensor = sensor;
     }
 
     public int getId() {
@@ -63,5 +66,13 @@ public class Measurement {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
     }
 }
