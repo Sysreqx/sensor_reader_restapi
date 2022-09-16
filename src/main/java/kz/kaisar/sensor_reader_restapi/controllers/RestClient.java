@@ -2,6 +2,7 @@ package kz.kaisar.sensor_reader_restapi.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kz.kaisar.sensor_reader_restapi.dto.SensorDTO;
 import kz.kaisar.sensor_reader_restapi.models.Sensor;
 import org.assertj.core.util.Maps;
 import org.springframework.http.HttpEntity;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RestClient {
@@ -32,7 +35,8 @@ public class RestClient {
     static RestTemplate restTemplate = new RestTemplate();
     public static void main(String[] args) throws JsonProcessingException {
         callGetMeasurementsAPI();
-        callSensorRegistrationAPI("Sensor from restClienteeesee");
+//        callSensorRegistrationAPI("Sensor from restClienteeesee");
+        callMeasurementsAddAPI("11", "true", "Sensor from restClienteeesee");
     }
 
     public static void callGetMeasurementsAPI() {
@@ -48,6 +52,31 @@ public class RestClient {
         String value = mapper.writeValueAsString(params);
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
         restTemplate.postForEntity(SENSORS_REGISTRATION_API, requestEntity, String.class);
+    }
+
+    public static void callMeasurementsAddAPI(
+            String temperature,
+            String isRaining,
+            String sensorName
+    ) throws JsonProcessingException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        ObjectMapper mapper = new ObjectMapper();
+        // add params
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("temperature", temperature);
+        params.put("isRaining", isRaining);
+
+        // add sensor
+        SensorDTO sensorDTO = new SensorDTO(sensorName);
+        params.put("sensor", sensorDTO);
+
+        // map to string
+        String value = mapper.writeValueAsString(params);
+        HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
+        // make a post query
+        restTemplate.postForEntity(MEASUREMENTS_ADD_API, requestEntity, String.class);
     }
 
 }
