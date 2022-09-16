@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class RestClient {
 
@@ -34,9 +35,10 @@ public class RestClient {
 
     static RestTemplate restTemplate = new RestTemplate();
     public static void main(String[] args) throws JsonProcessingException {
-        callGetMeasurementsAPI();
+//        callGetMeasurementsAPI();
 //        callSensorRegistrationAPI("Sensor from restClienteeesee");
-        callMeasurementsAddAPI("11", "true", "Sensor from restClienteeesee");
+//        callMeasurementsAddAPI("19", "true", "Sensor from restClienteeesee");
+        add1000Measurements();
     }
 
     public static void callGetMeasurementsAPI() {
@@ -60,6 +62,8 @@ public class RestClient {
             String sensorName
     ) throws JsonProcessingException {
 
+        RestTemplate restTemplate1 = new RestTemplate();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         ObjectMapper mapper = new ObjectMapper();
@@ -76,7 +80,21 @@ public class RestClient {
         String value = mapper.writeValueAsString(params);
         HttpEntity<String> requestEntity = new HttpEntity<String>(value, headers);
         // make a post query
-        restTemplate.postForEntity(MEASUREMENTS_ADD_API, requestEntity, String.class);
+        restTemplate1.postForEntity(MEASUREMENTS_ADD_API, requestEntity, String.class);
+    }
+
+    public static void add1000Measurements() throws JsonProcessingException {
+
+        Random random = new Random();
+
+        for (int j = 0; j < 1000; j++) {
+            int randomTemperature = random.nextInt(201) - 100; // -100 ... 100
+            boolean isRaining = randomTemperature % 2 == 0;
+
+            callMeasurementsAddAPI(String.valueOf(randomTemperature), String.valueOf(isRaining), "Sensor from restClienteeesee");
+        }
+
+        //callMeasurementsAddAPI("11", "true", "Sensor from RestClient");
     }
 
 }
